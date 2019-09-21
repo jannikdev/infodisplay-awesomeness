@@ -3,6 +3,7 @@ import time
 from enum import Enum
 import imaplib
 import base64
+from os import path
 import os
 import email
 from email.header import decode_header, make_header
@@ -68,8 +69,16 @@ def PrintWeatherInfo():
     print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celsius, condition))
 
 def GetEmails():
-    email_user = "infodisplaymail@gmail.com"
-    email_pass = "Pad3rb0rn"
+    def get():
+        f = "emaildaten"
+        if path.isfile(f):
+            with open(f) as f:
+                return f.read()
+        else:
+            return None
+
+    email_user = get().split(":")[0]
+    email_pass = get().split(":")[1]
 
     mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
     mail.login(email_user, email_pass)
@@ -101,8 +110,8 @@ def GetEmails():
                     slot1b = email_subject
                     slot1s = sender
                     slot = True
-    # print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
-    return (slot1s, slot1b, slot2s, slot2b, mailcounter)
+    print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
+    #return (slot1s, slot1b, slot2s, slot2b, mailcounter)
 
 #Diese Daten sind für die Email verfügbar:
 #slot1b = Betreff der aktuellsten Email
