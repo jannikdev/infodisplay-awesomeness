@@ -70,12 +70,11 @@ def PrintWeatherInfo():
 
 def GetEmails():
     def get():
-        f = "emaildaten"
-        if path.isfile(f):
-            with open(f) as f:
-                return f.read()
-        else:
-            return None
+        filepath = "emaildaten"
+        if path.isfile(filepath):
+            with open(filepath) as file:
+                return file.read()
+        return None
 
     email_user = get().split(":")[0]
     email_pass = get().split(":")[1]
