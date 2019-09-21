@@ -1,27 +1,61 @@
 body {
     background-color: black;
-    /* margin: 0px; */
 }
 .epaper{
     width: 640px;
     height: 384px;
     background-color: white;
 }
+.mid {
+    border-bottom-style: solid;
+    border-width: 5px;
+    text-align: center;
+}
 .top {
-    height: 30%;
+    height: 22%;
     width: 100%;
     background-color: white;
-    font-size: 200%;
+    font-size: 475%;
+    border-bottom-style: solid;
+    border-width: 5px;
+}
+.top > div{
+    width: 43%;
+    float:left;
+    text-align: center;
+}
+.linemiddle {
+    background-color: black;
+    position: absolute;
+    height: 95px;
+    width: 5px;
+    left: 280px;
+    top: 0px;
+}
+ 
+#rechts {
+    float: right;
+    width: 200px;
+    height: 200px;
+    margin-left: 20px;
+    border: 1px solid red;
 }
 .middle {
-    height: 50%;
+    height: 38%;
+    width: 65%;
+    background-color: white;
+    font-size: 900%;
+}
+.secoundmiddle{
+    height: 14%;
     width: 100%;
     background-color: white;
     font-size: 200%;
 }
 .bottom {
-    height: 20%;
+    height: 26%;
     width: 100%;
     background-color: white;
-    font-size: 200%;
+    font-size: 150%;
+    text-align: center;
 }

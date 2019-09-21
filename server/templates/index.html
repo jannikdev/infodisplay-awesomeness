@@ -4,12 +4,23 @@
       <title>{{ title }}</title>
    </head>
    <body>
-      <!--<h1>Hello, World!</h1>
-      <h2>The date and time on the server is: {{ time }}</h2>-->
-      <div class="epaper">
+      <!-- <div class="epaper">
          <div class="top">{{ celsius }}</div>
          <div class="middle">{{ time }}</div>
          <div class="bottom">some text is in here</div>
-      </div>
+      </div> -->
+      <div class="epaper">
+            <div class="top">
+               <div>{{ celsius }}</div>
+               <div style="width:57%">Bewölkt</div>
+            </div>
+            <div class="linemiddle"></div>
+            <img id="rechts" src="http://openweathermap.org/img/wn/02d@2x.png">
+            <div class="mid">
+               <div class="middle">16:39</div>
+               <div class="secoundmiddle">Samstag, der 21.09.2019</div>
+            </div>
+            <div class="bottom">Sie haben 0 neue Nachrichten, deswegen die aktuellsten News: {{ celsius }}</div>
+         </div>
    </body>
 </html>

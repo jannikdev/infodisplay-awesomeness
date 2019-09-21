@@ -1,4 +1,5 @@
 import imgkit
+import platform
 from PIL import Image
 
 def GetPng():
@@ -10,8 +11,11 @@ def GetPng():
         'crop-y': '8',
         'encoding': "ASCII",
     }
-    # config = imgkit.config(wkhtmltoimage='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
-    config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
+    if platform.system() == 'Windows':
+        config = imgkit.config(wkhtmltoimage='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+    elif platform.system() == 'Linux':
+        config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
+    
     imgkit.from_url('172.16.1.60:5000', 'out.png', options=options, config=config)
     file = open(r"static/content.txt", "w")
     file.write("Lorem")
