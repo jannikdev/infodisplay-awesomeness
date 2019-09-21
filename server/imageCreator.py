@@ -16,7 +16,7 @@ def GetPng():
     elif platform.system() == 'Linux':
         config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
     
-    imgkit.from_url('172.16.1.60:5000', 'out.png', options=options, config=config)
+    imgkit.from_url('172.16.1.60:5000', 'outputs/out.png', options=options, config=config)
     file = open(r"static/content.txt", "w")
     file.write("Lorem")
     img = Image.open("out.png")
