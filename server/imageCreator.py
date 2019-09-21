@@ -15,11 +15,11 @@ def GetPng():
         config = imgkit.config(wkhtmltoimage='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
     elif platform.system() == 'Linux':
         config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
-    
-    imgkit.from_url('172.16.1.60:5000', 'outputs/out.png', options=options, config=config)
-    file = open(r"static/content.txt", "w")
+    pathToOutputPng = 'outputs/out.png'
+    imgkit.from_url('172.16.1.60:5000', pathToOutputPng, options=options, config=config)
+    file = open(r"outputs/content.txt", "w")
     file.write("Lorem")
-    img = Image.open("out.png")
+    img = Image.open(pathToOutputPng)
     isBlack = False
     pixelCounter = 0
     for y in range(384):
@@ -37,6 +37,9 @@ def GetPng():
                     isBlack = True
                     pixelCounter = 0
             pixelCounter += 1
+        file.write(str(pixelCounter) + ";")
+        pixelCounter = 0
+        file.write(":")
     if pixelCounter != 0:
         file.write(str(pixelCounter) + ";ipsum")
     file.close()
