@@ -30,6 +30,10 @@ class daynames(Enum):
     Sat = "Sa"
     Sun = "So"
 
+class conditions(Enum):
+    Clear = ""
+    Drizzle = ""
+
 timeinfo = time.strftime("%H:%M %d.%m.%Y %a")
 date = time.strftime("%d.%m.%Y")
 dayname = time.strftime("%a")
@@ -51,6 +55,9 @@ mail_ids = data[0]
 id_list = mail_ids.split()
 
 mailcounter = 0
+slot = False
+slot1 = ""
+slot2 = ""
 for num in data[0].split():
     mailcounter = mailcounter + 1
     typ, data = mail.fetch(num, '(BODY.PEEK[])')
@@ -67,5 +74,13 @@ for num in data[0].split():
             except:
                 sender = email_from
             if not email_subject.startswith("=?"):
-                print("Email von %s: %s" % (sender, email_subject))
-print(str(mailcounter) + " neue Emails")
+                if slot:
+                    slot2 = "Email von %s: %s" % (sender, email_subject)
+                    slot = False
+                else:
+                    slot1 = "Email von %s: %s" % (sender, email_subject)
+                    slot = True
+                #print("Email von %s: %s" % (sender, email_subject))
+print("%s\n%s\n%s neue Emails empfangen" % (slot1, slot2, mailcounter))
+
+#slot1 und slot2 sind die beisten neusten Emails mit Absender und Betreff. mailcounter ist die Zahl der neu Empfangen Emails
