@@ -12,7 +12,7 @@ from email.header import decode_header, make_header
 with urllib.request.urlopen("https://newsapi.org/v2/top-headlines?country=de&category=technology&apiKey=0e302cb4656543ed90585a207ea3eb21") as url:
     newsdata = json.loads(url.read().decode())
     news = (newsdata["articles"][0]["title"])
-    print(news)
+    #print(news)
 # Wetter und Zeit daten
 with urllib.request.urlopen("http://api.openweathermap.org/data/2.5/weather?q=Paderborn&appid=d3854ae2f0e16209429220f480a775f0") as url:
     data = json.loads(url.read().decode())
@@ -87,17 +87,18 @@ for num in data[0].split():
                 sender = email_from.split("<")[1].split(">")[0]
             except:
                 sender = email_from
-            if not email_subject.startswith("=?"):
-                if slot:
-                    slot2b = email_subject
-                    slot2s = sender
-                    slot = False
-                else:
-                    slot1b = email_subject
-                    slot1s = sender
-                    slot = True
-                #print("Email von %s: %s" % (sender, email_subject))
-#print("%s\n%s\n%s neue Emails empfangen" % (slot1, slot2, mailcounter))
+            if email_subject.startswith("=?"):
+                email_subject = decode_header(email_subject)[0][0].decode("utf-8")
+            if slot:
+                slot2b = email_subject
+                slot2s = sender
+                slot = False
+            else:
+                slot1b = email_subject
+                slot1s = sender
+                slot = True
+            #print("Email von %s: %s" % (sender, email_subject))
+print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
 #print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celcius, condition))
 
 #Diese Daten sind für die Email verfügbar:
