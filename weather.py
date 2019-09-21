@@ -40,42 +40,37 @@ def GetWeatherApi():
     with urllib.request.urlopen(link) as url:
         return json.loads(url.read().decode())
 
+def GetNews():
+    link = "https://newsapi.org/v2/top-headlines?country=de&category=technology&apiKey=0e302cb4656543ed90585a207ea3eb21"
+    with urllib.request.urlopen(link) as url:
+        newsdata = json.loads(url.read().decode())
+        return newsdata["articles"][0]["title"]
 
+def GetTemperature():
+    data = GetWeatherApi()
+    celsius = round((data["main"]["temp"] - 273.15) * 10) / 10
+    return celsius
 
-# News
-with urllib.request.urlopen("https://newsapi.org/v2/top-headlines?country=de&category=technology&apiKey=0e302cb4656543ed90585a207ea3eb21") as url:
-    newsdata = json.loads(url.read().decode())
-    news = (newsdata["articles"][0]["title"])
-    #print(news)
+def GetWeatherCondition():
+    data = GetWeatherApi()
+    return data["weather"][0]["main"]
 
+def GetWeatherIcon():
+    data = GetWeatherApi()
+    return data["weather"][0]["icon"]
 
-# Wetter und Zeit daten
-data = GetWeatherApi()
-celvin = (data["main"]["temp"])
-conditioninfo = (data["weather"][0]["main"])
-icon = (data["weather"][0]["icon"])
-celcius = celvin - 273.15
-celcius = celcius * 10
-celcius = round(celcius)
-celcius = celcius / 10
-
-
-
-
-timeinfo = time.strftime("%H:%M")
-date = time.strftime("%d.%m.%Y")
-dayname = time.strftime("%a")
-dayname = getattr(daynames, dayname).value
-condition = getattr(conditions, conditioninfo).value
-
-print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celcius, condition))
+def PrintWeatherInfo():
+    timeinfo = time.strftime("%H:%M")
+    date = time.strftime("%d.%m.%Y")
+    dayname = time.strftime("%a")
+    dayname = getattr(daynames, dayname).value
+    celsius = GetTemperature()
+    condition = getattr(conditions, GetWeatherCondition()).value
+    print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celsius, condition))
 
 def mailthing():
-
     mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
-
     mail.login(email_user, email_pass)
-
     mail.select("inbox")
 
     type, data = mail.search(None, '(UNSEEN)')
@@ -109,7 +104,6 @@ def mailthing():
                     slot1b = email_subject
                     slot1s = sender
                     slot = True
-                #print("Email von %s: %s" % (sender, email_subject))
     print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
 
 #Diese Daten sind für die Email verfügbar:
@@ -126,5 +120,5 @@ def mailthing():
 #timeinfo = Aktuelle Uhrzeit in %H:%M
 #dayname = Tageskürzel auf deutsch
 #date = Datum
-#celcius = Temperatur in Paderborn
+#celsius = Temperatur in Paderborn
 #condition = Aktuelle Wetterlage
