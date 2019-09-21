@@ -51,7 +51,7 @@ char* serverUrl = "172.16.1.60";
 char* dataPath = "/static/content.txt";
 int sleeptime = 120;
 boolean wasUpdated = false;
-int touchPinLeft = 2;  
+int touchPinLeft = 2;
 int touchPinRight = 27;
 int touchPinBottom = 13;
 
@@ -75,10 +75,10 @@ void setup() {
   //Use the web object to add elements to the interface
   iot.web.addInterfaceElement("color", "input", "", "#configform", "LampColor");
   iot.web.setInterfaceElementAttribute("color", "type", "text");
- 
+
   Serial.println("Hello world");
   counter = 0;
-  
+
   client.setRxTimeout(10);            // 5 sec timeout
   client.onConnect(&onConnectHandler);
   client.onData(&onDataHandler);
@@ -113,18 +113,18 @@ void loop() {
   if( (baseClock % clockWebUpdate) == 0) {
     //connectToRaspi();
     //showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
-  } 
+  }
 
   if( (baseClock % clockRendering) == 0) {
     counter = counter + 1;
     // showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
   }
-  
+
   baseClock = baseClock + 500;
   delay(500);
-  
+
 //  esp_sleep_enable_timer_wakeup(FactorSeconds * (uint64_t) sleeptime);
-//      
+//
 //  Serial.println("Going to deep sleep now...");
 //  Serial.flush();
 //  esp_deep_sleep_start();
@@ -132,20 +132,16 @@ void loop() {
 
 void connectToRaspi() {
   if (WiFi.status() == WL_CONNECTED) {
-      wasUpdated = false;
-      //displayValue = "";
-      //completeSize = 0;
-      //lengthPixel = 0;
       const int httpPort = 5000;
       const char* host = serverUrl;
-  
+
       if (!client.connect(host, httpPort)) {
         Serial.println("connection failed");
       } else {
         Serial.println("Wait till the client is connected");
       }
     } else {
-      Serial.println("WLAN not conntected"); 
+      Serial.println("WLAN not conntected");
     }
 }
 
@@ -163,7 +159,7 @@ void showFont(const char name[], const GFXfont* f) {
 }
 
 void showByteArrayWithLength(String data, size_t len, boolean start) {
-  static int x = 0; 
+  static int x = 0;
   static int y = 0;
   int offset = 50000;
   Serial.println(String("Länge: ") + len);
@@ -200,7 +196,7 @@ void showByteArrayWithLength(String data, size_t len, boolean start) {
           x = 0;
         }
       }
-      isBlack = !isBlack;       
+      isBlack = !isBlack;
     }
   }
   display.update();
@@ -224,7 +220,7 @@ void showByteArrayWithLength(String data, size_t len, boolean start) {
 /* - - - - AsyncClient Handler - - - - - - - */
 void onConnectHandler(void *r, AsyncClient *client){
   Serial.println("OnConnect\n");
- 
+
   // String url =  iot.configuration.get("ImageAddress") + "&display=" + displayType;
   String query = String("GET ") + dataPath + " HTTP/1.1\r\n" +
                  "Host: " + serverUrl + "\r\n" +
@@ -254,7 +250,7 @@ void onDataHandler(void *r, AsyncClient *client, void *data, size_t len){
   // Serial.println(text);
   // showByteArrayWithLength(text, text.length(), !wasUpdated);
   // wasUpdated = true;
-  
+
   completeSize += text.length();
 
   displayValue += text;
@@ -285,7 +281,7 @@ void drawBlackPixelSimple() {
 }
 
 void drawBlackPixel(String data) {
-  static int x = 0; 
+  static int x = 0;
   static int y = 0;
   boolean isBlack = false;
   int pixelCounter;
@@ -311,8 +307,8 @@ void drawBlackPixel(String data) {
           x = 0;
         }
       }
-      isBlack = !isBlack;   
-      Serial.println(String("PixelCounter: ") + pixelCounter + "; Datalength: " + dataLeft.length());    
+      isBlack = !isBlack;
+      Serial.println(String("PixelCounter: ") + pixelCounter + "; Datalength: " + dataLeft.length());
     }
   }
   Serial.println("update now");
