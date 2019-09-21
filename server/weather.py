@@ -18,7 +18,7 @@ class daynames(Enum):
     Sun = "Sonntag"
 
 class conditions(Enum):
-    Clear = "Klar"
+    Clear = "Klarer Himmel"
     Drizzle = "Nieseln"
     Rain = "Regen"
     Clouds = "Bewölkt"
@@ -59,22 +59,28 @@ def GetWeatherIcon():
     icon = data["weather"][0]["icon"]
     return icon
 
-def PrintWeatherInfo():
-    timeinfo = time.strftime("%H:%M")
-    date = time.strftime("%d.%m.%Y")
+def getTime():
+    return time.strftime("%H:%M")
+
+def getDate():
+    return time.strftime("%d.%m.%Y")
+
+def getDayname():
     dayname = time.strftime("%a")
     dayname = getattr(daynames, dayname).value
-    celsius = GetTemperature()
-    condition = getattr(conditions, GetWeatherCondition()).value
-    print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celsius, condition))
+    return dayname
+
+def getCondition():
+    return getattr(conditions, GetWeatherCondition()).value
 
 def GetEmails():
     def get():
-        filepath = "emaildaten"
-        if path.isfile(filepath):
-            with open(filepath) as file:
-                return file.read()
-        return None
+        f = "emaildaten"
+        if path.isfile(f):
+            with open(f) as f:
+                return f.read()
+        else:
+            return None
 
     email_user = get().split(":")[0]
     email_pass = get().split(":")[1]
@@ -109,8 +115,10 @@ def GetEmails():
                     slot1b = email_subject
                     slot1s = sender
                     slot = True
-    print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
-    #return (slot1s, slot1b, slot2s, slot2b, mailcounter)
+    #print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
+    return (slot1s, slot1b, slot2s, slot2b, mailcounter)
+
+
 
 #Diese Daten sind für die Email verfügbar:
 #slot1b = Betreff der aktuellsten Email
