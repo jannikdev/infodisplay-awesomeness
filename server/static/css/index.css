@@ -6,12 +6,21 @@ body {
     height: 384px;
     background-color: white;
 }
-.one {
-    height: 25%;
+.top {
+    height: 30%;
     width: 100%;
     background-color: red;
+    font-size: 200%;
 }
-.two {
+.middle {
     height: 50%;
     width: 100%;
+    background-color: green;
+    font-size: 200%;
+}
+.bottom {
+    height: 20%;
+    width: 100%;
+    background-color: blue;
+    font-size: 200%;
 }
