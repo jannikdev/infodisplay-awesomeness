@@ -32,9 +32,6 @@ class conditions(Enum):
     Squall = "Nebel"
     Tornado = "Nebel"
 
-email_user = "infodisplaymail@gmail.com"
-email_pass = "Pad3rb0rn"
-
 def GetWeatherApi():
     link = "http://api.openweathermap.org/data/2.5/weather?q=Paderborn&appid=d3854ae2f0e16209429220f480a775f0"
     with urllib.request.urlopen(link) as url:
@@ -68,7 +65,10 @@ def PrintWeatherInfo():
     condition = getattr(conditions, GetWeatherCondition()).value
     print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celsius, condition))
 
-def mailthing():
+def GetEmails():
+    email_user = "infodisplaymail@gmail.com"
+    email_pass = "Pad3rb0rn"
+
     mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
     mail.login(email_user, email_pass)
     mail.select("inbox")
