@@ -34,6 +34,8 @@ def GetPng():
                     pixelCounter = 0
             pixelCounter += 1
     if pixelCounter != 0:
-        file.write(str(pixelCounter) + ";")
+        file.write(str(pixelCounter) + ";ipsum")
     file.close()
-GetPng()
+
+if __name__ == '__main__':
+    GetPng()
