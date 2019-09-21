@@ -13,8 +13,10 @@ from email.header import decode_header, make_header
 # Wetter und Zeit daten
 with urllib.request.urlopen("http://api.openweathermap.org/data/2.5/weather?q=Paderborn&appid=d3854ae2f0e16209429220f480a775f0") as url:
     data = json.loads(url.read().decode())
-    print(data)
+    #print(data)
 celvin = (data["main"]["temp"])
+conditioninfo = (data["weather"][0]["main"])
+icon = (data["weather"][0]["icon"])
 celcius = celvin - 273.15
 celcius = celcius * 10
 celcius = round(celcius)
@@ -31,16 +33,27 @@ class daynames(Enum):
     Sun = "So"
 
 class conditions(Enum):
-    Clear = ""
-    Drizzle = ""
+    Clear = "Klarer Himmel"
+    Drizzle = "Nieseln"
+    Rain = "Regen"
+    Clouds = "Bewölkt"
+    Thunderstorm = "Gewitter"
+    Snow = "Schnee"
+    Smoke = "Nebel"
+    Haze = "Nebel"
+    Fog = "Nebel"
+    Sand = "Nebel"
+    Dust = "Nebel"
+    Ash = "Nebel"
+    Squall = "Nebel"
+    Tornado = "Nebel"
 
-timeinfo = time.strftime("%H:%M %d.%m.%Y %a")
+timeinfo = time.strftime("%H:%M")
 date = time.strftime("%d.%m.%Y")
 dayname = time.strftime("%a")
-dayname = getattr(daynames,dayname).value
+dayname = getattr(daynames, dayname).value
+condition = getattr(conditions, conditioninfo).value
 
-#infodisplaymail@gmail.com
-#Pad3rb0rn
 email_user = "infodisplaymail@gmail.com"
 email_pass = "Pad3rb0rn"
 
@@ -56,8 +69,6 @@ id_list = mail_ids.split()
 
 mailcounter = 0
 slot = False
-slot1 = ""
-slot2 = ""
 for num in data[0].split():
     mailcounter = mailcounter + 1
     typ, data = mail.fetch(num, '(BODY.PEEK[])')
@@ -75,12 +86,27 @@ for num in data[0].split():
                 sender = email_from
             if not email_subject.startswith("=?"):
                 if slot:
-                    slot2 = "Email von %s: %s" % (sender, email_subject)
+                    slot2b = email_subject
+                    slot2s = sender
                     slot = False
                 else:
-                    slot1 = "Email von %s: %s" % (sender, email_subject)
+                    slot1b = email_subject
+                    slot1s = sender
                     slot = True
                 #print("Email von %s: %s" % (sender, email_subject))
-print("%s\n%s\n%s neue Emails empfangen" % (slot1, slot2, mailcounter))
+#print("%s\n%s\n%s neue Emails empfangen" % (slot1, slot2, mailcounter))
+#print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celcius, condition))
 
-#slot1 und slot2 sind die beisten neusten Emails mit Absender und Betreff. mailcounter ist die Zahl der neu Empfangen Emails
+#Diese Daten sind für die Email verfügbar:
+#slot1b = Betreff der aktuellsten Email
+#slot1s = Absender der aktuellsten Email
+#slot2b = Betreff der zweit aktuellsten Email
+#slot2s = Absender der zweit aktuellsten Email
+#mailcounter = Anzahl ungelesener Mails
+
+#Diese Daten sind für das Wetter verfügbar:
+#timeinfo = Aktuelle Uhrzeit in %H:%M
+#dayname = Tageskürzel auf deutsch
+#date = Datum
+#celcius = Temperatur in Paderborn
+#condition = Aktuelle Wetterlage
