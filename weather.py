@@ -70,9 +70,9 @@ def PrintWeatherInfo():
 
 def GetEmails():
     def get():
-        f = "emaildaten"
-        if path.isfile(f):
-            with open(f) as f:
+        p = "emaildaten"
+        if path.isfile(p):
+            with open(p) as f:
                 return f.read()
         else:
             return None
