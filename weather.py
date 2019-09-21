@@ -20,10 +20,10 @@ with urllib.request.urlopen("http://api.openweathermap.org/data/2.5/weather?q=Pa
 celvin = (data["main"]["temp"])
 conditioninfo = (data["weather"][0]["main"])
 icon = (data["weather"][0]["icon"])
-celcius = celvin - 273.15
-celcius = celcius * 10
-celcius = round(celcius)
-celcius = celcius / 10
+celsius = celvin - 273.15
+celsius = celsius * 10
+celsius = round(celsius)
+celsius = celsius / 10
 
 
 class daynames(Enum):
@@ -98,8 +98,9 @@ for num in data[0].split():
                 slot1s = sender
                 slot = True
             #print("Email von %s: %s" % (sender, email_subject))
-#print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
-#print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celcius, condition))
+print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
+print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celsius, condition))
+print("Hier die aktuellsten News: " + news)
 
 #Diese Daten sind für die Email verfügbar:
 #slot1b = Betreff der aktuellsten Email
