@@ -98,7 +98,7 @@ for num in data[0].split():
                 slot1s = sender
                 slot = True
             #print("Email von %s: %s" % (sender, email_subject))
-print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
+#print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
 #print("Es ist %s Uhr am %s, den %s. Die aktuelle Temperatur beträgt %s °C und das Wetter ist %s" % (timeinfo, dayname, date, celcius, condition))
 
 #Diese Daten sind für die Email verfügbar:
