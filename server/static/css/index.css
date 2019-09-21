@@ -1,5 +1,6 @@
 body {
     background-color: black;
+    /* margin: 0px; */
 }
 .epaper{
     width: 640px;
@@ -9,18 +10,18 @@ body {
 .top {
     height: 30%;
     width: 100%;
-    background-color: red;
+    background-color: white;
     font-size: 200%;
 }
 .middle {
     height: 50%;
     width: 100%;
-    background-color: green;
+    background-color: white;
     font-size: 200%;
 }
 .bottom {
     height: 20%;
     width: 100%;
-    background-color: blue;
+    background-color: white;
     font-size: 200%;
 }
