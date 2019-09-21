@@ -48,10 +48,10 @@ AsyncClient client;
 
 int counter;
 char* serverUrl = "172.16.1.60";
-char* dataPath = "/static/content.txt";
+char* dataPath = "/static/outputs/content.txt";
 int sleeptime = 120;
 boolean wasUpdated = false;
-int touchPinLeft = 2;  
+int touchPinLeft = 2;
 int touchPinRight = 27;
 int touchPinBottom = 13;
 
@@ -63,22 +63,21 @@ int clockRendering = 120000;
 int clockWebUpdate = 60000;
 int baseClock = 0;
 
-String displayValue = "";
-int completeSize = 0;
+String displayValue = "0;0;0;:0;0;";
 int lengthPixel = 0;
 
 void setup() {
   Serial.begin(115200);
   iot.begin();
-  display.init(115200); // enable diagnostic output on Serial
+  display.init(); // enable diagnostic output on Serial
 
   //Use the web object to add elements to the interface
   iot.web.addInterfaceElement("color", "input", "", "#configform", "LampColor");
   iot.web.setInterfaceElementAttribute("color", "type", "text");
- 
+
   Serial.println("Hello world");
   counter = 0;
-  
+
   client.setRxTimeout(10);            // 5 sec timeout
   client.onConnect(&onConnectHandler);
   client.onData(&onDataHandler);
@@ -86,17 +85,11 @@ void setup() {
   client.onTimeout(&onTimeoutHandler);
   client.onError(&onErrorHandler);
 
-  // showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
-
   delay(10000);
-
-  drawBlackPixel("");
-
-  //connectToRaspi();
+  // connectToRaspi();
 }
 
 void loop() {
-  // Serial.println("Woken up");
   touchValueLeft = touchRead(touchPinLeft);
   if(touchValueLeft < 50) {
     Serial.println(String("Left Below 50: ") + touchValueLeft);
@@ -111,44 +104,32 @@ void loop() {
   }
 
   if( (baseClock % clockWebUpdate) == 0) {
-    //connectToRaspi();
+    connectToRaspi();
     //showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
-  } 
-
-  if( (baseClock % clockRendering) == 0) {
-    counter = counter + 1;
-    // showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
+    delay(1000);
+    drawBlackPixel(displayValue);
   }
-  
-  baseClock = baseClock + 500;
+
+  baseClock = baseClock + 1500;
   delay(500);
-  
-//  esp_sleep_enable_timer_wakeup(FactorSeconds * (uint64_t) sleeptime);
-//      
-//  Serial.println("Going to deep sleep now...");
-//  Serial.flush();
-//  esp_deep_sleep_start();
 }
 
 void connectToRaspi() {
   if (WiFi.status() == WL_CONNECTED) {
-      wasUpdated = false;
-      //displayValue = "";
-      //completeSize = 0;
-      //lengthPixel = 0;
       const int httpPort = 5000;
       const char* host = serverUrl;
-  
+
       if (!client.connect(host, httpPort)) {
         Serial.println("connection failed");
       } else {
         Serial.println("Wait till the client is connected");
       }
     } else {
-      Serial.println("WLAN not conntected"); 
+      Serial.println("WLAN not conntected");
     }
 }
 
+/*
 void showFont(const char name[], const GFXfont* f) {
   display.fillScreen(GxEPD_WHITE);
   display.setTextColor(GxEPD_BLACK);
@@ -163,13 +144,10 @@ void showFont(const char name[], const GFXfont* f) {
 }
 
 void showByteArrayWithLength(String data, size_t len, boolean start) {
-  static int x = 0; 
+  static int x = 0;
   static int y = 0;
-  int offset = 50000;
-  Serial.println(String("Länge: ") + len);
   boolean isBlack = false;
   int pixelCounter;
-  int lengthPixelBlack = 0;
   String currentCounter;
   String dataLeft = data;
 
@@ -181,18 +159,10 @@ void showByteArrayWithLength(String data, size_t len, boolean start) {
       currentCounter = dataLeft.substring(0, indexNext);
       dataLeft = dataLeft.substring(indexNext + 1);
       pixelCounter = currentCounter.toInt();
-      Serial.println(String("Index: ") + indexNext + "; Pixel: " + pixelCounter + "; Datalänge: " + dataLeft.length() + "; Length Pixel" + lengthPixel);
       for(int i = 0; i < pixelCounter; i++) {
         lengthPixel += 1;
-//        if( lengthPixel >= offset) {
-//          Serial.println(String("50000 zu") + lengthPixel);
-//          display.update();
-//          offset += 50000;
-//        }
         if(isBlack == true) {
           display.drawPixel(x, y, GxEPD_BLACK);
-        } else {
-          // display.drawPixel(x, y, GxEPD_WHITE);
         }
         x++;
         if(x == 640) {
@@ -200,32 +170,16 @@ void showByteArrayWithLength(String data, size_t len, boolean start) {
           x = 0;
         }
       }
-      isBlack = !isBlack;       
+      isBlack = !isBlack;
     }
   }
   display.update();
-  Serial.println(String("Gesamte Pixel") + lengthPixel);
-
-//  for (size_t i=0; i<len; i++){
-//    char pixelValue = data.charAt(i);
-//    if (pixelValue == '1') {
-//      display.drawPixel(x, y, GxEPD_WHITE);
-//    } else {
-//      display.drawPixel(x, y, GxEPD_BLACK);
-//    }
-//    x++;
-//    if(x == GxEPD_WIDTH) {
-//      y++;
-//      x = 0;
-//    }
-//  }
-}
+}*/
 
 /* - - - - AsyncClient Handler - - - - - - - */
 void onConnectHandler(void *r, AsyncClient *client){
   Serial.println("OnConnect\n");
- 
-  // String url =  iot.configuration.get("ImageAddress") + "&display=" + displayType;
+
   String query = String("GET ") + dataPath + " HTTP/1.1\r\n" +
                  "Host: " + serverUrl + "\r\n" +
                  "Connection: close\r\n\r\n";
@@ -233,35 +187,27 @@ void onConnectHandler(void *r, AsyncClient *client){
 }
 
 void onDataHandler(void *r, AsyncClient *client, void *data, size_t len){
-  Serial.println(String("New data: ") + len + String(" Bytes (Länge der übertragenen Daten)"));
-  // Serial.println(" - - - - - - - - ");
-  // Serial.println((char*)data);
-
   String text = String((char*) data);
+  Serial.println(String("New data: ") + text.length());
   int indexContentStart = text.indexOf("Lorem");
   if(indexContentStart != -1) {
-    Serial.println("Content starts at " + String(indexContentStart + 5));
+    displayValue = "";
     text = text.substring(indexContentStart + 5);
   }
   int indexContentEnd = text.indexOf("ipsum");
   if(indexContentEnd != -1) {
     text = text.substring(0, indexContentEnd);
+  }
+  if(!text.startsWith("HTTP")) {
+    displayValue += text;
+    // Serial.println(String("Display value Länge: ") + displayValue.length() + "; Textlänge: " + text.length());
+    if(text.length() > 100) {
+      text = text.substring(0, 100);
+    }
+    // Serial.println(String("Anfang: ") + text);
+  } else {
     Serial.println(text);
   }
-  // String part = text.substring(0, 15);
-  // Serial.println("TEXT: " + part);
-  // Serial.println(" # # # TEXT # # # ");
-  // Serial.println(text);
-  // showByteArrayWithLength(text, text.length(), !wasUpdated);
-  // wasUpdated = true;
-  
-  completeSize += text.length();
-
-  displayValue += text;
-  Serial.println(String("Längen: ") + completeSize + ";" + displayValue.length());
-
-  // Serial.println(String("OnData: ") + len + " Bytes");
-  // drawPixels((char*)data, len, false);
 }
 
 void onTimeoutHandler(void *r, AsyncClient *client, uint32_t timeout){
@@ -270,54 +216,70 @@ void onTimeoutHandler(void *r, AsyncClient *client, uint32_t timeout){
 
 void onDisconnectHandler(void *r, AsyncClient *client){
   // showByteArrayWithLength(displayValue, displayValue.length(), true);
-  // Serial.println(displayValue);
-  drawBlackPixelSimple();
   Serial.println("OnDisconnect");
   // showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
 }
 
+/*
 void drawBlackPixelSimple() {
   display.fillScreen(GxEPD_WHITE);
   for(int i = 0; i < 300; i += 1 ) {
     display.drawPixel(i, 1, GxEPD_BLACK);
   }
   display.update();
-}
+}*/
 
 void drawBlackPixel(String data) {
-  static int x = 0; 
-  static int y = 0;
+  int x = 0;
+  int y = 0;
   boolean isBlack = false;
-  int pixelCounter;
-  String currentCounter;
-  String dataLeft = "350;240;500;980;100;";
+  int pixelCounter = 0;
+  String currentCounter = "";
+  String dataLeft = data;
+  String line = "";
   dataLeft.trim();
 
+  Serial.println(String("Start draw black pixel: ") + dataLeft.length());
+  
   display.fillScreen(GxEPD_WHITE);
+  display.setCursor(0,0);
 
   while(dataLeft.length() > 0) {
-    int indexNext = dataLeft.indexOf(";");
-    if(indexNext < dataLeft.length()) {
-      currentCounter = dataLeft.substring(0, indexNext);
-      dataLeft = dataLeft.substring(indexNext + 1);
-      pixelCounter = currentCounter.toInt();
-      for(int i = 0; i < pixelCounter; i++) {
-        if(isBlack == true) {
-          display.drawPixel(x, y, GxEPD_BLACK);
-        }
-        x++;
-        if(x == 640) {
-          y++;
-          x = 0;
+    int indexNextLine = dataLeft.indexOf(":");
+    if(indexNextLine < dataLeft.length()) {
+      
+      line = dataLeft.substring(0, indexNextLine);
+      dataLeft = dataLeft.substring(indexNextLine + 1);
+      // Serial.println(line);
+      while(line.length() > 0) {
+        
+        int indexNextValue = line.indexOf(";");
+        if(indexNextValue < line.length()) {
+          currentCounter = line.substring(0, indexNextValue);
+          line = line.substring(indexNextValue + 1);
+          pixelCounter = currentCounter.toInt();
+          
+          for(int i = 0; i < pixelCounter; i++) {
+            if(isBlack == true) {
+              display.drawPixel(x, y, GxEPD_BLACK);
+            }
+            x++;
+            if(x == 640) {
+              y++;
+              x = 0;
+            }
+          }
+          isBlack = !isBlack;
         }
       }
-      isBlack = !isBlack;   
-      Serial.println(String("PixelCounter: ") + pixelCounter + "; Datalength: " + dataLeft.length());    
+      if(x != 0) {
+        y++;
+        x = 0;
+      }
     }
   }
-  Serial.println("update now");
   display.update();
-  Serial.println("updated");
+  Serial.println("Updated screen");
 }
 
 void onErrorHandler(void *r, AsyncClient *client, int8_t error){
