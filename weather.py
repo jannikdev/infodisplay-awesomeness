@@ -8,8 +8,11 @@ import os
 import email
 from email.header import decode_header, make_header
 
-
-
+# News
+with urllib.request.urlopen("https://newsapi.org/v2/top-headlines?country=de&category=technology&apiKey=0e302cb4656543ed90585a207ea3eb21") as url:
+    newsdata = json.loads(url.read().decode())
+    news = (newsdata["articles"][0]["title"])
+    print(news)
 # Wetter und Zeit daten
 with urllib.request.urlopen("http://api.openweathermap.org/data/2.5/weather?q=Paderborn&appid=d3854ae2f0e16209429220f480a775f0") as url:
     data = json.loads(url.read().decode())
@@ -103,6 +106,9 @@ for num in data[0].split():
 #slot2b = Betreff der zweit aktuellsten Email
 #slot2s = Absender der zweit aktuellsten Email
 #mailcounter = Anzahl ungelesener Mails
+
+#News Daten:
+#news = Neuste News aus Deutschland
 
 #Diese Daten sind für das Wetter verfügbar:
 #timeinfo = Aktuelle Uhrzeit in %H:%M
