@@ -8,12 +8,12 @@ with urllib.request.urlopen(link) as url:
     data = json.loads(url.read().decode())
     #print(data)
 celvin = (data["main"]["temp"])
-celcius = celvin - 273.15
-celcius = celcius * 10
-celcius = round(celcius)
-celcius = celcius / 10
+celsius = celvin - 273.15
+celsius = celsius * 10
+celsius = round(celsius)
+celsius = celsius / 10
 
-#print(celcius)
+#print(celsius)
 #-------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__, static_url_path='/static')
@@ -25,7 +25,8 @@ def hello():
     timeString = now.strftime("%Y-%m-%d %H:%M")
     templateData = {
         'title' : 'HELLO!',
-        'time': timeString
+        'time': timeString,
+        'celsius': str(celsius) + "°C"
     }
     return render_template('index.html', **templateData)
 
