@@ -50,11 +50,13 @@ def GetTemperature():
 
 def GetWeatherCondition():
     data = GetWeatherApi()
-    return data["weather"][0]["main"]
+    condition = data["weather"][0]["main"]
+    return condition
 
 def GetWeatherIcon():
     data = GetWeatherApi()
-    return data["weather"][0]["icon"]
+    icon = data["weather"][0]["icon"]
+    return icon
 
 def PrintWeatherInfo():
     timeinfo = time.strftime("%H:%M")
@@ -74,17 +76,12 @@ def GetEmails():
     mail.select("inbox")
 
     type, data = mail.search(None, '(UNSEEN)')
-    mail_ids = data[0]
-    id_list = mail_ids.split()
 
     mailcounter = 0
     slot = False
     for num in data[0].split():
         mailcounter = mailcounter + 1
         typ, data = mail.fetch(num, '(BODY.PEEK[])')
-        raw_email = data[0][1]# converts byte literal to string removing b''
-        raw_email_string = raw_email.decode('utf-8')
-        email_message = email.message_from_string(raw_email_string)
         for response_part in data:
             if isinstance(response_part, tuple):
                 msg = email.message_from_string(tuple(response_part)[1].decode('utf-8'))
@@ -104,7 +101,8 @@ def GetEmails():
                     slot1b = email_subject
                     slot1s = sender
                     slot = True
-    print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
+    # print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
+    return (slot1s, slot1b, slot2s, slot2b, mailcounter)
 
 #Diese Daten sind für die Email verfügbar:
 #slot1b = Betreff der aktuellsten Email
