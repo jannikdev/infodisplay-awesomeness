@@ -5,6 +5,7 @@ from enum import Enum
 import imaplib
 import base64
 import os
+from os import path
 import email
 from email.header import decode_header, make_header
 
@@ -56,9 +57,16 @@ date = time.strftime("%d.%m.%Y")
 dayname = time.strftime("%a")
 dayname = getattr(daynames, dayname).value
 condition = getattr(conditions, conditioninfo).value
+def get(p):
+    f = p
+    if path.isfile(f):
+        with open(f) as f:
+            return f.read()
+    else:
+        return None
 
-email_user = "infodisplaymail@gmail.com"
-email_pass = "Pad3rb0rn"
+email_user = get("emaildaten").split(":")[0]
+email_pass = get("emaildaten").split(":")[1]
 
 mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
 
