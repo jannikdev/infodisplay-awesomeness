@@ -9,13 +9,13 @@ import email
 from email.header import decode_header, make_header
 
 class daynames(Enum):
-    Mon = "Mo"
-    Tue = "Di"
-    Wed = "Mi"
-    Thu = "Do"
-    Fri = "Fr"
-    Sat = "Sa"
-    Sun = "So"
+    Mon = "Montag"
+    Tue = "Dienstag"
+    Wed = "Mittwoch"
+    Thu = "Donnerstag"
+    Fri = "Freitag"
+    Sat = "Samstag"
+    Sun = "Sonntag"
 
 class conditions(Enum):
     Clear = "Klar"
