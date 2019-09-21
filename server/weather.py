@@ -18,7 +18,7 @@ class daynames(Enum):
     Sun = "Sonntag"
 
 class conditions(Enum):
-    Clear = "Klarer Himmel"
+    Clear = "Klar"
     Drizzle = "Nieseln"
     Rain = "Regen"
     Clouds = "Bewölkt"
