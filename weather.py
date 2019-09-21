@@ -46,21 +46,26 @@ mail.login(email_user, email_pass)
 
 mail.select("inbox")
 
-type, data = mail.search(None, 'ALL')
+type, data = mail.search(None, '(UNSEEN)')
 mail_ids = data[0]
 id_list = mail_ids.split()
 
+mailcounter = 0
 for num in data[0].split():
-    typ, data = mail.fetch(num, '(RFC822)' )
+    mailcounter = mailcounter + 1
+    typ, data = mail.fetch(num, '(BODY.PEEK[])')
     raw_email = data[0][1]# converts byte literal to string removing b''
     raw_email_string = raw_email.decode('utf-8')
     email_message = email.message_from_string(raw_email_string)
-    subject = email_message.__str__()[:].split("Subject: ")[1].split("To: ")[0].split("MIME-Version: ")[0]
     for response_part in data:
         if isinstance(response_part, tuple):
             msg = email.message_from_string(response_part[1].decode('utf-8'))
             email_subject = msg['subject']
             email_from = msg['from']
-            sender = email_from.split("<")[1].split(">")[0]
-            if not subject.startswith("=?"):
-                print("Email von %s: %s" % (sender, subject))
+            try:
+                sender = email_from.split("<")[1].split(">")[0]
+            except:
+                sender = email_from
+            if not email_subject.startswith("=?"):
+                print("Email von %s: %s" % (sender, email_subject))
+print(str(mailcounter) + " neue Emails")
