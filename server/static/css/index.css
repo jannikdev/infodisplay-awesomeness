@@ -1,0 +1,17 @@
+body {
+    background-color: black;
+}
+.epaper{
+    width: 640px;
+    height: 384px;
+    background-color: white;
+}
+.one {
+    height: 25%;
+    width: 100%;
+    background-color: red;
+}
+.two {
+    height: 50%;
+    width: 100%;
+}
