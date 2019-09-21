@@ -50,12 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# manually
 .vscode/
 server/static/content.txt
 server/content.txt
 server/out.png
 server/__pycache__/imageCreator.cpython-37.pyc
-server/static/png.txt
-server/static/pngoneline.txt
-server/static/sometext.txt
-server/static/sometext.txt
+server/static/*.txt
+.idea/
