@@ -12,15 +12,15 @@
       <div class="epaper">
             <div class="top">
                <div>{{ celsius }}</div>
-               <div style="width:57%">Bewölkt</div>
+               <div style="width:57%">{{ Condition }}</div>
             </div>
             <div class="linemiddle"></div>
-            <img id="rechts" src="/static/res/02d.png">
+            <img id="rechts" src="/static/res/{{ icon }}.png">
             <div class="mid">
-               <div class="middle">16:39</div>
-               <div class="secoundmiddle">Samstag, der 21.09.2019</div>
+               <div class="middle">{{ time }}</div>
+               <div class="secoundmiddle">{{ dayname }}, der {{ date }}</div>
             </div>
-            <div class="bottom">Sie haben 0 neue Nachrichten, deswegen die aktuellsten News: {{ celsius }}</div>
+            <div class="bottom">Sie haben 0 neue Nachrichten, deswegen die aktuellsten News: {{ newas }}</div>
          </div>
    </body>
 </html>
