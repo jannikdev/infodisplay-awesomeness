@@ -59,18 +59,18 @@ def GetWeatherIcon():
     icon = data["weather"][0]["icon"]
     return icon
 
-def getTime():
+def GetTime():
     return time.strftime("%H:%M")
 
-def getDate():
+def GetDate():
     return time.strftime("%d.%m.%Y")
 
-def getDayname():
+def GetDayname():
     dayname = time.strftime("%a")
     dayname = getattr(daynames, dayname).value
     return dayname
 
-def getCondition():
+def GetCondition():
     return getattr(conditions, GetWeatherCondition()).value
 
 def GetEmails():
