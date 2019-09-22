@@ -93,6 +93,10 @@ def GetEmails():
 
     mailcounter = 0
     slot = False
+    slot1s= ""
+    slot1b = ""
+    slot2s= ""
+    slot2b= ""
     for num in data[0].split():
         mailcounter = mailcounter + 1
         typ, data = mail.fetch(num, '(BODY.PEEK[])')
