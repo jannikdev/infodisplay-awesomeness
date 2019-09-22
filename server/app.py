@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from server.weather import GetTemperature, GetEmails, GetNews, GetCondition, GetWeatherIcon, GetTime, GetDate, GetDayname
+from weather import GetTemperature, GetEmails, GetNews, GetCondition, GetWeatherIcon, GetTime, GetDate, GetDayname
 
 app = Flask(__name__, static_url_path='/static')
 
