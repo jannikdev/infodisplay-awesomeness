@@ -64,7 +64,7 @@ class worker(Thread):
             GetPng()
             if open("./static/killImageCreator.txt", "r").read() != "kill":
                 print("done scraping and converting. sleeping for 55 sec now")
-                time.sleep(55)
+                time.sleep(25)
             else:
                 running = False
 
