@@ -75,10 +75,10 @@ def GetCondition():
 
 def GetEmails():
     def get():
-        f = "emaildaten"
-        if path.isfile(f):
-            with open(f) as f:
-                return f.read()
+        filepath = "./static/emaildaten"
+        if path.isfile(filepath):
+            with open(filepath) as file:
+                return file.read()
         else:
             return None
 
@@ -121,22 +121,3 @@ def GetEmails():
                     slot = True
     #print("%s:%s\n%s:%s\n%s neue Emails empfangen" % (slot1s, slot1b, slot2s, slot2b, mailcounter))
     return (slot1s, slot1b, slot2s, slot2b, mailcounter)
-
-
-
-#Diese Daten sind für die Email verfügbar:
-#slot1b = Betreff der aktuellsten Email
-#slot1s = Absender der aktuellsten Email
-#slot2b = Betreff der zweit aktuellsten Email
-#slot2s = Absender der zweit aktuellsten Email
-#mailcounter = Anzahl ungelesener Mails
-
-#News Daten:
-#news = Neuste News aus Deutschland
-
-#Diese Daten sind für das Wetter verfügbar:
-#timeinfo = Aktuelle Uhrzeit in %H:%M
-#dayname = Tageskürzel auf deutsch
-#date = Datum
-#celsius = Temperatur in Paderborn
-#condition = Aktuelle Wetterlage

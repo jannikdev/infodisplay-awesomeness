@@ -59,6 +59,6 @@ server/out.png
 server/__pycache__/imageCreator.cpython-37.pyc
 server/static/*.txt
 .idea/
-emaildaten
+server/static/emaildaten
 outputs
 !server/static/killImageCreator.txt
