@@ -48,7 +48,7 @@ AsyncClient client;
 
 int counter;
 char* serverUrl = "172.16.1.60";
-char* dataPath = "/static/outputs/content.txt";
+char* dataPath = "/static/content.txt";
 int sleeptime = 120;
 boolean wasUpdated = false;
 int touchPinLeft = 2;
@@ -63,7 +63,7 @@ int clockRendering = 120000;
 int clockWebUpdate = 60000;
 int baseClock = 0;
 
-String displayValue = "0;0;0;:0;0;";
+String displayValue = "0;0;0;0;0;";
 int lengthPixel = 0;
 
 void setup() {
@@ -90,28 +90,29 @@ void setup() {
 }
 
 void loop() {
-  touchValueLeft = touchRead(touchPinLeft);
-  if(touchValueLeft < 50) {
-    Serial.println(String("Left Below 50: ") + touchValueLeft);
-  }
-  touchValueRight = touchRead(touchPinRight);
-  if(touchValueRight < 50) {
-    Serial.println(String("Right Below 50: ") + touchValueRight);
-  }
-  touchValueBottom = touchRead(touchPinBottom);
-  if(touchValueBottom < 50) {
-    Serial.println(String("Bottom Below 50: ") + touchValueBottom);
-  }
+//  touchValueLeft = touchRead(touchPinLeft);
+//  if(touchValueLeft < 50) {
+//    Serial.println(String("Left Below 50: ") + touchValueLeft);
+//  }
+//  touchValueRight = touchRead(touchPinRight);
+//  if(touchValueRight < 50) {
+//    Serial.println(String("Right Below 50: ") + touchValueRight);
+//  }
+//  touchValueBottom = touchRead(touchPinBottom);
+//  if(touchValueBottom < 50) {
+//    Serial.println(String("Bottom Below 50: ") + touchValueBottom);
+//  }
 
-  if( (baseClock % clockWebUpdate) == 0) {
+  //if( (baseClock % clockWebUpdate) == 0) {
     connectToRaspi();
     //showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
     delay(1000);
-    drawBlackPixel(displayValue);
-  }
+    drawBlackPixelOld(displayValue);
+  //}
 
   baseClock = baseClock + 1500;
-  delay(500);
+  delay(30000);
+  // Serial.print(".");
 }
 
 void connectToRaspi() {
@@ -200,11 +201,6 @@ void onDataHandler(void *r, AsyncClient *client, void *data, size_t len){
   }
   if(!text.startsWith("HTTP")) {
     displayValue += text;
-    // Serial.println(String("Display value Länge: ") + displayValue.length() + "; Textlänge: " + text.length());
-    if(text.length() > 100) {
-      text = text.substring(0, 100);
-    }
-    // Serial.println(String("Anfang: ") + text);
   } else {
     Serial.println(text);
   }
@@ -215,9 +211,7 @@ void onTimeoutHandler(void *r, AsyncClient *client, uint32_t timeout){
 }
 
 void onDisconnectHandler(void *r, AsyncClient *client){
-  // showByteArrayWithLength(displayValue, displayValue.length(), true);
   Serial.println("OnDisconnect");
-  // showFont("FreeMonoBold12pt7b", &FreeMonoBold12pt7b);
 }
 
 /*
@@ -247,9 +241,10 @@ void drawBlackPixel(String data) {
   while(dataLeft.length() > 0) {
     int indexNextLine = dataLeft.indexOf(":");
     if(indexNextLine < dataLeft.length()) {
-      
+      Serial.println(String("Index Länge:") + indexNextLine);
       line = dataLeft.substring(0, indexNextLine);
       dataLeft = dataLeft.substring(indexNextLine + 1);
+      Serial.println(String("Line:") + line);
       // Serial.println(line);
       while(line.length() > 0) {
         
@@ -258,13 +253,13 @@ void drawBlackPixel(String data) {
           currentCounter = line.substring(0, indexNextValue);
           line = line.substring(indexNextValue + 1);
           pixelCounter = currentCounter.toInt();
-          
           for(int i = 0; i < pixelCounter; i++) {
             if(isBlack == true) {
               display.drawPixel(x, y, GxEPD_BLACK);
             }
             x++;
             if(x == 640) {
+              Serial.println(String("Wechsel in neue Zeile in Schleife"));
               y++;
               x = 0;
             }
@@ -273,8 +268,58 @@ void drawBlackPixel(String data) {
         }
       }
       if(x != 0) {
+        Serial.println("Wechsel in neue Zeile nach zu kurzer Zeile");
         y++;
         x = 0;
+      }
+    }
+  }
+  display.update();
+  Serial.println("Updated screen");
+}
+
+void drawBlackPixelOld(String data) {
+  int x = 0;
+  int y = 0;
+  boolean isBlack = false;
+  int pixelCounter = 0;
+  int pixelCounter2 = 0;
+  String currentCounter = "";
+  String dataLeft = data;
+  dataLeft.trim();
+
+  Serial.println(String("Start draw black pixel old: ") + dataLeft.length());
+  
+  display.fillScreen(GxEPD_WHITE);
+  display.setCursor(0,0);
+  
+  while(dataLeft.length() > 0) {
+    int indexNextValue = dataLeft.indexOf(";");
+    
+    if(indexNextValue < dataLeft.length()) {
+      currentCounter = dataLeft.substring(0, indexNextValue);
+      dataLeft = dataLeft.substring(indexNextValue + 1);
+      int indexNextValue2 = dataLeft.indexOf(";");
+      
+      if(indexNextValue2 < dataLeft.length()) {
+        currentCounter = dataLeft.substring(0, indexNextValue2);
+        dataLeft = dataLeft.substring(indexNextValue2 + 1);
+        pixelCounter2 = currentCounter.toInt();
+        
+        if(pixelCounter != pixelCounter2 && pixelCounter2 != 0) {
+          pixelCounter = pixelCounter2;
+        }
+        for(int i = 0; i < pixelCounter; i++) {
+          if(isBlack == true) {
+            display.drawPixel(x, y, GxEPD_BLACK);
+          }
+          x++;
+          if(x == 640) {
+            y++;
+            x = 0;
+          }
+        }
+        isBlack = !isBlack;
       }
     }
   }
