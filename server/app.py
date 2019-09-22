@@ -10,7 +10,7 @@ def hello():
     now = datetime.datetime.now()
     timeString = now.strftime("%Y-%m-%d %H:%M")
     templateData = {
-        'title' : 'HELLO!',
+        'title' : 'Infodisplay',
         'time': timeString,
         'celsius': str(GetTemperature()) + "°C"
     }
