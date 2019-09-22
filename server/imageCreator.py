@@ -20,13 +20,10 @@ def GetPng():
 
     pathToOutputPng = 'static/outputs/out.png'
     pathToOutputTxt = 'static/outputs/content.txt'
-
     imgkit.from_url('172.16.1.60:5000', pathToOutputPng, options=options, config=config)
     file = open(pathToOutputTxt, 'w')
     file.write("Lorem")
-
     img = Image.open(pathToOutputPng)
-
     isBlack = False
     pixelCounter = 0
     for y in range(384):
@@ -36,23 +33,16 @@ def GetPng():
             if pixel == white:
                 if isBlack:
                     file.write(str(pixelCounter) + ";")
-                    # file.write(str(pixelCounter) + ";")
                     isBlack = False
                     pixelCounter = 0
             else:
                 if not isBlack:
                     file.write(str(pixelCounter) + ";")
-                    # file.write(str(pixelCounter) + ";")
                     isBlack = True
                     pixelCounter = 0
             pixelCounter += 1
-        # file.write(str(pixelCounter) + ";")
-        # file.write(str(pixelCounter) + ";")
-        # pixelCounter = 0
-        # file.write(":")
     if pixelCounter != 0:
         file.write(str(pixelCounter) + ";")
-        # file.write(str(pixelCounter) + ";") 
     file.write("ipsum")
     file.close()
 
@@ -69,5 +59,4 @@ class worker(Thread):
                 running = False
 
 if __name__ == '__main__':
-    # GetPng()
     worker().start()
