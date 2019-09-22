@@ -1,6 +1,6 @@
 <!DOCTYPE html>
    <head>
-      <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+      <link rel="stylesheet" type="text/css" href="/static/css/{{ index }}.css">
       <title>{{ title }}</title>
    </head>
    <body>
@@ -20,7 +20,7 @@
                <div class="middle">{{ time }}</div>
                <div class="secoundmiddle">{{ dayname }}, der {{ date }}</div>
             </div>
-            <div class="bottom">Sie haben 0 neue Nachrichten, deswegen die aktuellsten News: {{ newas }}</div>
+            {{ bottom }}
          </div>
    </body>
 </html>
