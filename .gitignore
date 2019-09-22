@@ -61,3 +61,4 @@ server/static/*.txt
 .idea/
 emaildaten
 outputs
+!server/static/killImageCreator.txt

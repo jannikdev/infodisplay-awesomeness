@@ -1,6 +1,8 @@
 import imgkit
 import platform
 from PIL import Image
+import time
+from threading import Thread
 
 def GetPng():
     options = {
@@ -12,19 +14,19 @@ def GetPng():
         'encoding': "ASCII",
     }
     if platform.system() == 'Windows':
-        config = imgkit.config(wkhtmltoimage='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltoimage.exe')
+        config = imgkit.config(wkhtmltoimage='C:/Program Files/wkhtmltopdf/bin/wkhtmltoimage.exe')
     elif platform.system() == 'Linux':
         config = imgkit.config(wkhtmltoimage='/usr/bin/wkhtmltoimage')
 
     pathToOutputPng = 'static/outputs/out.png'
-    pathToOutputTxt = r'static/outputs/content.txt'
+    pathToOutputTxt = 'static/outputs/content.txt'
 
     imgkit.from_url('172.16.1.60:5000', pathToOutputPng, options=options, config=config)
     file = open(pathToOutputTxt, 'w')
     file.write("Lorem")
 
     img = Image.open(pathToOutputPng)
-    
+
     isBlack = False
     pixelCounter = 0
     for y in range(384):
@@ -34,20 +36,38 @@ def GetPng():
             if pixel == white:
                 if isBlack:
                     file.write(str(pixelCounter) + ";")
+                    # file.write(str(pixelCounter) + ";")
                     isBlack = False
                     pixelCounter = 0
             else:
                 if not isBlack:
                     file.write(str(pixelCounter) + ";")
+                    # file.write(str(pixelCounter) + ";")
                     isBlack = True
                     pixelCounter = 0
             pixelCounter += 1
-        file.write(str(pixelCounter) + ";")
-        pixelCounter = 0
-        file.write(":")
+        # file.write(str(pixelCounter) + ";")
+        # file.write(str(pixelCounter) + ";")
+        # pixelCounter = 0
+        # file.write(":")
     if pixelCounter != 0:
-        file.write(str(pixelCounter) + ";ipsum")
+        file.write(str(pixelCounter) + ";")
+        # file.write(str(pixelCounter) + ";") 
+    file.write("ipsum")
     file.close()
 
+class worker(Thread):
+    def run(self):
+        running = True
+        while running:
+            print("starting to scrape and convert")
+            GetPng()
+            if open("./static/killImageCreator.txt", "r").read() != "kill":
+                print("done scraping and converting. sleeping for 55 sec now")
+                time.sleep(55)
+            else:
+                running = False
+
 if __name__ == '__main__':
-    GetPng()
+    # GetPng()
+    worker().start()
