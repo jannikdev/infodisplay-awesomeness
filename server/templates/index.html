@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+   <head>
+      <link rel="stylesheet" type="text/css" href="/static/css/{{ index }}.css">
+      <title>{{ title }}</title>
+   </head>
+   <body>
+      <div class="epaper">
+            <div class="top">
+               <div>{{ celsius }}</div>
+               <div style="width:57%">{{ condition }}</div>
+            </div>
+            <div class="linemiddle"></div>
+            <img id="rechts" src="/static/res/{{ icon }}.png">
+            <div class="mid">
+               <div class="middle">{{ time }}</div>
+               <div class="secoundmiddle">{{ dayname }}, der {{ date }}</div>
+            </div>
+         <div class="bottom">{{ bottom }}</div>
+         </div>
+   </body>
+</html>

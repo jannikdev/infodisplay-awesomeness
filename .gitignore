@@ -52,4 +52,14 @@ Mkfile.old
 dkms.conf
 
 emaildaten
-.vscode/
+=======
+# manually
+server/static/content.txt
+server/content.txt
+server/out.png
+server/__pycache__/imageCreator.cpython-37.pyc
+server/static/*.txt
+.idea/
+server/static/emaildaten
+outputs
+!server/static/killImageCreator.txt
